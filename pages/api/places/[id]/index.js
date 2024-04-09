@@ -1,6 +1,5 @@
 import dbConnect from "../../../../db/connect";
-import Place from "../../../../db/models/Places";
-import { db_comments } from "../../../../lib/db_comments";
+import Place from "../../../../db/models/Place";
 
 export default async function handler(request, response) {
   const { id } = request.query;
