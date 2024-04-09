@@ -9,6 +9,7 @@ const Headline = styled.h1`
   background-color: white;
   margin: 0;
   padding: 20px;
+  color: #053b50;
   text-align: center;
     
   z-index: 1;
