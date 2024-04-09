@@ -1,8 +1,12 @@
-import styled from "styled-components";
-import { FormContainer, Input, Label } from "./Form";
-import { StyledButton } from "./StyledButton.js";
+import styled from "styled-components"
+import { FormContainer, Input, Label } from "./Form"
+import { StyledButton } from "./StyledButton.js"
+import { useRouter } from "next/router"
 
-export default function Comments({ locationName, comments }) {
+export default function Comments({ place }) {
+  const router = useRouter()
+  const { id } = router.query
+
   const Article = styled.article`
     display: flex;
     flex-direction: column;
@@ -15,10 +19,34 @@ export default function Comments({ locationName, comments }) {
       border-bottom: solid 1px black;
       padding: 20px;
     }
-  `;
+  `
 
-  function handleSubmitComment(e) {
-    e.preventDefault();
+  async function handleSubmitComment(e) {
+    e.preventDefault()
+
+    const formData = new FormData(e.target)
+    const name = formData.get("name")
+    const comment = formData.get("comment")
+
+    const body = {
+      place: place,
+      newComment: {
+        name: name,
+        comment: comment,
+      },
+    }
+
+    const response = await fetch("/api/comments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+
+    if (response.ok) {
+      router.reload()
+    }
   }
 
   return (
@@ -30,23 +58,23 @@ export default function Comments({ locationName, comments }) {
         <Input type="text" name="comment" placeholder="comment here..." />
         <StyledButton type="submit">Send</StyledButton>
       </FormContainer>
-      {comments && (
+      {place.comments && (
         <>
-          <h1> {comments.length} fans commented on this place:</h1>
-          {comments.map(({ name, comment }, idx) => {
+          <h1> {place.comments.length} fans commented on this place:</h1>
+          {place.comments.map(({ _id, name, comment }) => {
             return (
-              <>
-                <p key={idx}>
+              <div key={_id}>
+                <p>
                   <small>
-                    <strong>{name}</strong> commented on {locationName}
+                    <strong>{name}</strong> commented on {place.location}
                   </small>
                 </p>
                 <span>{comment}</span>
-              </>
-            );
+              </div>
+            )
           })}
         </>
       )}
     </Article>
-  );
+  )
 }

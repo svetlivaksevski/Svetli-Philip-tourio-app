@@ -9,7 +9,7 @@ export default async function handler(request, response) {
 
   if (request.method === "GET") {
     try {
-      const foundPlace = await Place.findById(id);
+      const foundPlace = await Place.findById(id).populate("comments");
       return response.status(200).json(foundPlace);
     } catch (error) {
       console.error(error);

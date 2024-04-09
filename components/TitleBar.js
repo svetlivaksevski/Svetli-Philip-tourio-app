@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Link from "next/link";
 
 const Headline = styled.h1`
   position: fixed;
@@ -9,9 +10,15 @@ const Headline = styled.h1`
   margin: 0;
   padding: 20px;
   text-align: center;
+    
   z-index: 1;
+  cursor: pointer;
 `;
 
 export default function TitleBar() {
-  return <Headline>Tourio</Headline>;
+  return (
+    <Link href={"/"} passHref legacyBehavior>
+      <Headline>Tourio</Headline>
+    </Link>
+  )
 }
