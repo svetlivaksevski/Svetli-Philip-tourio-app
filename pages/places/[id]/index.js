@@ -37,11 +37,16 @@ export default function DetailsPage() {
 
   if (!isReady || isLoading || error) return <h2>Loading...</h2>;
 
-  function deletePlace() {
-    console.log("deleted?");
+  async function deletePlace() {
+    const response = await fetch(`/api/places/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      await response.json(router.push("/"));
+    } else {
+      console.error(response.status);
+    }
   }
-
-  console.log(place);
 
   return (
     <>
@@ -74,7 +79,7 @@ export default function DetailsPage() {
           Delete
         </StyledButton>
       </ButtonContainer>
-      {/* <Comments locationName={place.name} comments={comments} /> */}
+      <Comments locationName={place.name} comments={place.comments} />
     </>
   );
 }
