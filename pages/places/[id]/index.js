@@ -1,16 +1,16 @@
-import Link from "next/link";
-import { useRouter } from "next/router.js";
-import useSWR from "swr";
-import styled from "styled-components";
-import { StyledLink } from "../../../components/StyledLink.js";
-import { StyledButton } from "../../../components/StyledButton.js";
-import { StyledImage } from "../../../components/StyledImage.js";
-import Comments from "../../../components/Comments.js";
+import Link from "next/link"
+import { useRouter } from "next/router.js"
+import useSWR from "swr"
+import styled from "styled-components"
+import { StyledLink } from "../../../components/StyledLink.js"
+import { StyledButton } from "../../../components/StyledButton.js"
+import { StyledImage } from "../../../components/StyledImage.js"
+import Comments from "../../../components/Comments.js"
 
 const ImageContainer = styled.div`
   position: relative;
   height: 15rem;
-`;
+`
 
 const ButtonContainer = styled.section`
   display: flex;
@@ -21,7 +21,7 @@ const ButtonContainer = styled.section`
     flex-grow: 1;
     text-align: center;
   }
-`;
+`
 
 const StyledLocationLink = styled(StyledLink)`
   text-align: center;
@@ -31,21 +31,21 @@ const StyledLocationLink = styled(StyledLink)`
 `;
 
 export default function DetailsPage() {
-  const router = useRouter();
-  const { isReady } = router;
-  const { id } = router.query;
-  const { data: place, isLoading, error } = useSWR(`/api/places/${id}`);
+  const router = useRouter()
+  const { isReady } = router
+  const { id } = router.query
+  const { data: place, isLoading, error } = useSWR(`/api/places/${id}`)
 
-  if (!isReady || isLoading || error) return <h2>Loading...</h2>;
+  if (!isReady || isLoading || error) return <h2>Loading...</h2>
 
   async function deletePlace() {
     const response = await fetch(`/api/places/${id}`, {
       method: "DELETE",
-    });
+    })
     if (response.ok) {
-      await response.json(router.push("/"));
+      await response.json(router.push("/"))
     } else {
-      console.error(response.status);
+      console.error(response.status)
     }
   }
 
@@ -80,7 +80,9 @@ export default function DetailsPage() {
           Delete
         </StyledButton>
       </ButtonContainer>
-      <Comments locationName={place.name} comments={place.comments} />
+
+      {/*<Comments locationName={place.name} comments={place.comments} />*/}
+      <Comments place={place} />
     </>
-  );
+  )
 }
